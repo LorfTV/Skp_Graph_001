@@ -133,7 +133,8 @@ st.sidebar.write("*Beta_ve--0.2*")
 st.sidebar.write("***Write any expression in terms of x and with numerical data, and have fun!***") 
 
 # Input equation and process
-x, y, con_input_Eq, input_Eq = input_eq()
+x, y, con_input_Eq, input_Eq = input_eq() 
+st.write("Decide a Theme for the Graph!") 
 
 # Choose theme buttons
 col1, col2, col3, col4 = st.columns(4)  # Create a row with 4 columns for button alignment
@@ -147,15 +148,14 @@ with col4:
     light_normal_button = st.button('Light Normal')
 
 # Logic to handle theme selection 
-st.write("Decide a Theme for the Graph!") 
 if blueprint_button:
-    theme = "Blueprint"
+    theme = "blueprint"
 elif manim_button:
-    theme = "Manim"
+    theme = "manim"
 elif light_abnormal_button:
-    theme = "Light abnormal"
+    theme = "light abnormal"
 elif light_normal_button:
-    theme = "Light normal"
+    theme = "light normal"
 else:
     theme = None
 

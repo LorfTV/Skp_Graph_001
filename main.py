@@ -36,7 +36,7 @@ def convert_equation(equation):
 
 # --- Input Equation Function ---
 def input_eq(): 
-    input_Eq = st.text_input("Write an equation in terms of x:", key="input_eq")
+    input_Eq = st.text_input("Write an equation in terms of x [use only small letters]:", key="input_eq")
 
     x_min_slider = st.slider("Enter the minimum value of x (default: -10):", -100.0, 0.0, -10.0, key="x_min_slider")
     x_min_manual = st.text_input("Or manually input the minimum value of x:", str(x_min_slider), key="x_min_manual")

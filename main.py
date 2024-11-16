@@ -120,7 +120,7 @@ def save_plot():
     return buf
 
 # --- Streamlit App ---
-st.set_page_config(page_title="Graph.F(X)", layout="wide")
+st.set_page_config(page_title="Graph.F(X)")
 st.title("Graph.F(X)")  
 
 # Sidebar content

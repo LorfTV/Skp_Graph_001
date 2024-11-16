@@ -146,15 +146,16 @@ with col3:
 with col4:
     light_normal_button = st.button('Light Normal')
 
-# Logic to handle theme selection
+# Logic to handle theme selection 
+st.write("Decide a Theme for the Graph!") 
 if blueprint_button:
-    theme = "blueprint"
+    theme = "Blueprint"
 elif manim_button:
-    theme = "manim"
+    theme = "Manim"
 elif light_abnormal_button:
-    theme = "light abnormal"
+    theme = "Light abnormal"
 elif light_normal_button:
-    theme = "light normal"
+    theme = "Light normal"
 else:
     theme = None
 

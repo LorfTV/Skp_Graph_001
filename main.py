@@ -7,7 +7,7 @@ from PIL import Image
 
 # --- Default Setup Function ---
 def default_setup(): 
-    plt.grid(True, which='major', axis='both', color='#01A79D', linewidth=0.5) # Grid on both the axes
+    plt.grid(True, which='major', axis='both', color='#01A79D', linewidth=0.5)  # Grid on both the axes
     plt.gcf().set_facecolor('Black')  # Outer background
     plt.gca().set_facecolor('Black')  # Inner background
     plt.minorticks_on()  # Minor ticks on axes
@@ -62,25 +62,55 @@ def input_eq():
     
     return x, y, con_input_Eq, input_Eq  # Return x, y, converted equation, and input equation
 
-# --- Build Graph Function ---
-def build_eq(x, y, con_input_Eq, input_Eq): 
-    if con_input_Eq:
-        st.subheader(f"Equation: {con_input_Eq}")
-        
-        # Set the graph style
-        plt.figure(figsize=(10, 6))
-        plt.plot(x, y, label=f"{input_Eq}", color='b', linewidth=2)
-        plt.xlabel('x', fontsize=14)
-        plt.ylabel('y', fontsize=14)
-        plt.title(f"Graph of {input_Eq}", fontsize=16)
-        plt.legend()
+# --- Setup Plot for Different Themes ---
+def setup_plot(x, y, theme):
+    # Create a figure and axis for the plot
+    fig, ax = plt.subplots()
 
-        default_setup()
-        
-        # Display the plot with Streamlit
-        st.pyplot(plt)
+    ax.grid(True, which='major', axis='both', linewidth=0.5)
+    ax.minorticks_on()
+
+    # Theme-based settings
+    if theme == "blueprint":
+        fig.patch.set_facecolor('#0252AD')
+        ax.set_facecolor('#0252AD')
+        grid_color = 'white'
+        label_color = 'white'
+        line_color = 'red'
+        title_color = 'white'
+    elif theme == "manim":
+        fig.patch.set_facecolor('black')
+        ax.set_facecolor('black')
+        grid_color = '#01A79D'
+        label_color = 'white'
+        line_color = 'blue'
+        title_color = 'white'
+    elif theme == "light abnormal":
+        fig.patch.set_facecolor('white')
+        ax.set_facecolor('white')
+        grid_color = 'green'
+        label_color = 'red'
+        line_color = 'blue'
+        title_color = 'red'
+    elif theme == "light normal":
+        fig.patch.set_facecolor('white')
+        ax.set_facecolor('white')
+        grid_color = '#01A79D'
+        label_color = 'black'
+        line_color = 'red'
+        title_color = 'black'
     else:
-        st.warning("Please enter an equation to plot.")
+        raise ValueError(f"Unknown theme: {theme}")
+
+    # Apply theme settings
+    ax.grid(color=grid_color)
+    ax.tick_params(axis='both', which='both', colors=label_color)
+    ax.set_xlabel('X-axis', color=label_color)
+    ax.set_ylabel('Y-axis', color=label_color)
+    ax.set_title('Graph', color=title_color, fontname='serif', fontsize=15)
+    ax.plot(x, y, color=line_color)
+
+    return fig  # Return the figure to pass to Streamlit
 
 # --- Save Plot Function ---
 def save_plot():
@@ -94,22 +124,54 @@ st.set_page_config(page_title="Graph.F(X)", layout="wide")
 st.title("Graph.F(X)")  
 
 # Sidebar content
-try:
-    st.sidebar.image("skepsis_f(x).png", use_column_width=True)
-except FileNotFoundError:
-    st.sidebar.warning("Image not found!")
 
+st.sidebar.image("skepsis_f(x).png")
 st.sidebar.title("**Graph.F[X]**")  
 st.sidebar.write("*Skepsis Foundation's*") 
 st.sidebar.write("### **Developed By Nachiketa Vellikad**") 
 st.sidebar.write("*Beta_ve--0.1*") 
-st.sidebar.write("***Write any equation in terms of x and with numerical data, and have fun!***") 
+st.sidebar.write("***Write any expression in terms of x and with numerical data, and have fun!***") 
 
 # Input equation and process
 x, y, con_input_Eq, input_Eq = input_eq()
 
-# Plot and build the graph
-build_eq(x, y, con_input_Eq, input_Eq)
+# Choose theme buttons
+col1, col2, col3, col4 = st.columns(4)  # Create a row with 4 columns for button alignment
+with col1:
+    blueprint_button = st.button('Blueprint')
+with col2:
+    manim_button = st.button('Manim')
+with col3:
+    light_abnormal_button = st.button('Light Abnormal')
+with col4:
+    light_normal_button = st.button('Light Normal')
+
+# Logic to handle theme selection
+if blueprint_button:
+    theme = "blueprint"
+elif manim_button:
+    theme = "manim"
+elif light_abnormal_button:
+    theme = "light abnormal"
+elif light_normal_button:
+    theme = "light normal"
+else:
+    theme = None
+
+# Plot the graph based on the selected theme
+if con_input_Eq:
+    if theme:
+        try:
+            fig = setup_plot(x, y, theme)  # Get the figure from setup_plot function
+            st.pyplot(fig)  # Display the plot in Streamlit with the selected theme
+        except ValueError as e:
+            st.error(f"Error: {e}")
+    else:
+        # Default graph plot without theme
+        st.subheader(f"Equation: {con_input_Eq}")
+        plt.plot(x, y, label=f"{input_Eq}", color='b', linewidth=2)
+        default_setup()  # Apply default setup (you can customize if needed)
+        st.pyplot(plt)  # Display the plot
 
 # Add download button
 if con_input_Eq:

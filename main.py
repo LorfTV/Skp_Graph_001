@@ -123,6 +123,7 @@ def save_plot():
 # --- Streamlit App ---
 st.set_page_config(page_title="Graph.F(X)")
 st.title("Graph.F(X)")  
+st.sidebar.image("skepsis_f(x).png")
 
 # Sidebar content
 st.sidebar.title("**Graph.F[X]**")  

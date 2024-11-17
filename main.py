@@ -3,7 +3,6 @@ import numpy as np
 import streamlit as st
 import re
 import io
-from PIL import Image
 
 # --- Default Setup Function ---
 def default_setup(): 
@@ -70,44 +69,46 @@ def setup_plot(x, y, theme):
     ax.grid(True, which='major', axis='both', linewidth=0.5)
     ax.minorticks_on()
 
+    # Default colors for themes
+    grid_color = '#4CE4C9'  # Default grid color for themes  # Default label color
+    title_color = "#F0F6FC"  # Default title color
+    line_color = 'blue'  # Default line color
+
     # Theme-based settings
-    if theme == "blueprint":
-        fig.patch.set_facecolor('#0252AD')
-        ax.set_facecolor('#0252AD')
-        grid_color = 'white'
-        label_color = 'white'
-        line_color = 'red'
-        title_color = 'white'
-    elif theme == "manim":
-        fig.patch.set_facecolor('black')
-        ax.set_facecolor('black')
-        grid_color = '#01A79D'
-        label_color = 'white'
-        line_color = 'blue'
-        title_color = 'white'
-    elif theme == "light abnormal":
-        fig.patch.set_facecolor('white')
-        ax.set_facecolor('white')
-        grid_color = 'green'
-        label_color = 'red'
-        line_color = 'blue'
-        title_color = 'red'
-    elif theme == "light normal":
-        fig.patch.set_facecolor('white')
-        ax.set_facecolor('white')
-        grid_color = '#01A79D'
-        label_color = 'black'
-        line_color = 'red'
+    if theme == "Manim": 
+        line_color = "cyan"  
+        plt.gca().set_facecolor('#0D1117')
+        plt.gcf().set_facecolor('#0D1117')
+        ax.grid(True, linestyle="--", linewidth=0.5, color="#4CE4C9")
+        ax.set_title("Graph", color="#F0F6FC", fontfamily="serif", size=22, weight='bold')
+        ax.set_xlabel("X-axis", color="#F0F6FC", fontfamily="serif", size=14)
+        ax.set_ylabel("Y-axis", color="#F0F6FC", fontfamily="serif", size=14)
+        ax.tick_params(axis="both", which="major", length=7, colors="#F0F6FC", direction="inout")
+        ax.tick_params(axis="both", which="minor", length=4, colors="#F0F6FC", direction="in")
+    elif theme == "Blueprint":
+        line_color = "red"  # Red for Blueprint theme
+        plt.gca().set_facecolor('#1C4E80')
+        plt.gcf().set_facecolor('#1C4E80')  
+        ax.grid(True, linestyle="--", linewidth=0.5, color="#FFFFFF")
+        ax.set_title("Graph", color="#FFFFFF", fontfamily="DejaVu Sans Mono", size=22, weight='bold')
+        ax.set_xlabel("X-axis", color="#FFFFFF", fontfamily="DejaVu Sans Mono", size=14)
+        ax.set_ylabel("Y-axis", color="#FFFFFF", fontfamily="DejaVu Sans Mono", size=14)
+        ax.tick_params(axis="both", which="major", length=7, colors="#FFFFFF", direction="inout")
+        ax.tick_params(axis="both", which="minor", length=4, colors="#FFFFFF", direction="in")
+    elif theme == "DrSimple":
+        line_color = "green"  # Green for DrSimple theme
+        ax.set_facecolor("#F5F5F5")
+        ax.grid(True, linestyle="-", linewidth=0.5, color="#D6D6D6")
+        ax.set_title("Graph", color="#333333", fontfamily="DejaVu Sans", size=22, weight='bold')
+        ax.set_xlabel("X-axis", color="#333333", fontfamily="DejaVu Sans Mono", size=14)
+        ax.set_ylabel("Y-axis", color="#333333", fontfamily="DejaVu Sans Mono", size=14)
+        ax.tick_params(axis="both", which="major", length=7, colors="#333333", direction="out")
+        ax.tick_params(axis="both", which="minor", length=4, colors="#333333", direction="out")
         title_color = 'black'
     else:
         raise ValueError(f"Unknown theme: {theme}")
 
     # Apply theme settings
-    ax.grid(color=grid_color)
-    ax.tick_params(axis='both', which='both', colors=label_color)
-    ax.set_xlabel('X-axis', color=label_color)
-    ax.set_ylabel('Y-axis', color=label_color)
-    ax.set_title('Graph', color=title_color, fontname='serif', fontsize=15)
     ax.plot(x, y, color=line_color)
 
     return fig  # Return the figure to pass to Streamlit
@@ -124,8 +125,6 @@ st.set_page_config(page_title="Graph.F(X)")
 st.title("Graph.F(X)")  
 
 # Sidebar content
-
-st.sidebar.image("skepsis_f(x).png")
 st.sidebar.title("**Graph.F[X]**")  
 st.sidebar.write("*Skepsis Foundation's*") 
 st.sidebar.write("### **Developed By Nachiketa Vellikad**") 
@@ -143,19 +142,16 @@ with col1:
 with col2:
     manim_button = st.button('Manim')
 with col3:
-    light_abnormal_button = st.button('Light Abnormal')
-with col4:
-    light_normal_button = st.button('Light Normal')
+    dr_simple = st.button('DrSimple')
+
 
 # Logic to handle theme selection 
 if blueprint_button:
-    theme = "blueprint"
+    theme = "Blueprint"
 elif manim_button:
-    theme = "manim"
-elif light_abnormal_button:
-    theme = "light abnormal"
-elif light_normal_button:
-    theme = "light normal"
+    theme = "Manim"
+elif dr_simple:
+    theme = "DrSimple"
 else:
     theme = None
 
@@ -168,13 +164,5 @@ if con_input_Eq:
         except ValueError as e:
             st.error(f"Error: {e}")
     else:
-        # Default graph plot without theme
-        st.subheader(f"Equation: {con_input_Eq}")
-        plt.plot(x, y, label=f"{input_Eq}", color='b', linewidth=2)
-        default_setup()  # Apply default setup (you can customize if needed)
-        st.pyplot(plt)  # Display the plot
+        st.write("Select a theme to apply.") 
 
-# Add download button
-if con_input_Eq:
-    buf = save_plot()
-    st.download_button("Download Graphed plot", buf, "skepsisFX_Graph.png", "image/png")

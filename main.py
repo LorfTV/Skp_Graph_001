@@ -131,6 +131,7 @@ st.sidebar.write("*Skepsis Foundation's*")
 st.sidebar.write("### **Developed By Nachiketa Vellikad**") 
 st.sidebar.write("*Beta_ve--0.2*") 
 st.sidebar.write("***Write any expression in terms of x and with numerical data, and have fun!***") 
+st.sidebar.write("Animations Coming Soon, Stay Tuned :)") 
 
 # Input equation and process
 x, y, con_input_Eq, input_Eq = input_eq() 
